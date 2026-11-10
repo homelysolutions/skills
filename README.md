@@ -32,6 +32,17 @@ Copiés le 10.11.2026 depuis GitHub. Licences d'origine dans `licences/`.
 
 Ce sont des skills à appeler (« passe l'aigle sur ce post »), pas des règles qui bloquent tout automatiquement.
 
+### Dossier `perso/` : mes propres skills
+
+Écrits pour moi, sans source externe. Ce sont aussi ceux enregistrés sur mon compte Claude.
+
+| Skill | À quoi il sert |
+|---|---|
+| `redacteur-marketing` | Rédige ou audite un contenu marketing (blog, article, landing page, lead magnet, ebook, page de vente, webinaire, upsell, e-mails, pub) : questions, choix de la cible, corrections, rapport PDF avant/après |
+| `seo-radar` | Tout le SEO en un seul skill : mots-clés, audit des pages, technique et visibilité IA, veille concurrence, plan de croissance. La rédaction passe par `redacteur-marketing` |
+
+Si ces deux skills sont déjà chargés depuis mon compte Claude, inutile de les installer en plus sur l'ordinateur : cela ferait un doublon.
+
 Pas inclus, car ce ne sont pas des skills :
 - **OmniRoute** : un logiciel serveur qui fait passer tes outils IA par d'autres fournisseurs. Son skill `ponytail` est inclus ci-dessus.
 - **AgentSkills** : le format standard des skills (le dossier + `SKILL.md`), pas un skill à installer.
