@@ -9,7 +9,7 @@ Tu aides un site à être trouvé, compris et cité par Google, Bing et les assi
 
 ## Étape 0 — Aiguillage
 
-Ne commence aucun travail avant de savoir quel module est attendu.
+Ne commence aucun travail avant de savoir quel module est attendu. Une fois le module connu, passe par l'Étape 1 avant toute analyse.
 
 1. **Si la demande est claire, ne pose pas la question** et annonce le module en une ligne :
    - « sur quels mots-clés me positionner », « longue traîne » → Module A
@@ -32,15 +32,57 @@ Ne commence aucun travail avant de savoir quel module est attendu.
 3. **Puis, dans le même tour, seulement ce qui manque** (quatre questions au maximum en tout) :
    - Quel site ou quelles pages ?
    - Quelle zone et quelle langue ?
-   - Qu'as-tu sous la main ? (export Search Console, Bing Webmaster Tools, carte des mots-clés, fiche concurrence, rien)
+   - As-tu déjà une carte des mots-clés ou une fiche concurrence ? (la source des chiffres est traitée à l'Étape 1)
    - Jusqu'où aller ? (état des lieux seulement, ou état des lieux puis corrections)
 
 4. Si l'utilisateur dit d'avancer sans répondre, ou s'il n'est pas là : choisis le module le plus probable, écris tes hypothèses en tête du livrable sous « Hypothèses retenues », et limite-toi à l'état des lieux.
 
+## Étape 1 — Source de données (avant toute analyse)
+
+Les chiffres réels d'un site appartiennent à la personne qui utilise ce skill. **C'est elle qui se connecte à ses propres comptes.** Ce skill ne fournit aucun accès à un compte, à un outil payant ou aux données de son auteur.
+
+Règles fermes :
+- Ne demande jamais un mot de passe, une clé d'API ou un code de validation dans la conversation. La connexion se fait dans l'outil lui-même ou dans les réglages de connecteurs de Claude.
+- N'utilise que les comptes sur lesquels l'utilisateur a des droits. S'il analyse le site d'un client, c'est au client de donner l'accès ou de fournir l'export.
+- N'invente aucun chiffre. Sans source connectée, tu le dis et tu passes en mode public (option E).
+
+### 1. Vérifie ce qui est déjà disponible
+
+Dans cet ordre : un connecteur de données déjà actif dans la session (Search Console, Analytics, Bing, outil SEO), un fichier d'export joint, la fiche `seo-suivi.md`. Si une source existe, annonce-la en une ligne et passe au module.
+
+### 2. Sinon, propose les sources et laisse choisir
+
+Pose la question (avec l'outil de questions à choix si tu en as un) : **« D'où viennent tes chiffres ? Connecte ton propre compte, ou choisis l'analyse sans compte. »**
+
+| Option | Ce qu'elle apporte | Comment l'utilisateur se connecte | Coût |
+|---|---|---|---|
+| A. Google Search Console | Requêtes réelles, impressions, clics, positions, pages indexées. La source la plus utile. | search.google.com/search-console, ajouter et valider le site, puis Performances, 12 à 16 mois, Exporter en CSV, joindre le fichier. | Gratuit |
+| B. Bing Webmaster Tools | Requêtes Bing, outil de mots-clés avec volumes, citations dans Copilot (AI Performance). | bing.com/webmasters, importer le site depuis la Search Console, exporter les rapports, joindre les fichiers. | Gratuit |
+| C. Google Analytics 4 | Trafic par source (dont les assistants IA), pages vues, conversions. Ne donne pas les requêtes. | analytics.google.com, rapports Acquisition et Pages et écrans, exporter en CSV, joindre le fichier. | Gratuit |
+| D. Connecteur de données dans Claude | Lecture automatique de la Search Console, d'Analytics ou d'un outil SEO, sans export. | Réglages de connecteurs de Claude, avec le compte de l'utilisateur. Si tu as un outil de recherche de connecteurs, cherche « search console », « analytics », « seo » et présente ce qui existe. | Selon l'éditeur : à vérifier par l'utilisateur |
+| E. Sans compte : analyse publique | Ce qui se voit de l'extérieur : balises et contenu des pages, robots.txt, sitemap, vitesse (PageSpeed Insights), résultats de recherche, saisie semi-automatique, concurrents, réponses des assistants IA. | Rien à connecter : l'URL du site suffit. | Gratuit |
+
+L'utilisateur peut combiner plusieurs options. Si le site vient d'être ajouté à la Search Console, préviens qu'il faut quelques jours avant d'avoir des données, et propose l'option E en attendant.
+
+### 3. Selon le choix
+
+- **A, B, C ou D** : attends que la source soit disponible (fichier joint ou connecteur actif), puis lance le module. Indique dans le livrable la source et la période.
+- **E, ou connexion impossible** : écris en tête du livrable **« Analyse sans données de compte »**. Tu peux juger la structure, le contenu, la technique et la concurrence. Tu ne peux pas donner d'impressions, de clics ni de positions mesurées : marque ces cases « non mesuré » et ne les estime pas. Termine en rappelant quelle connexion débloquerait la suite.
+
+### 4. Quelle source pour quel module
+
+| Module | Source idéale | Possible sans compte (E) ? |
+|---|---|---|
+| A — Mots-clés | Search Console, Bing | Oui, sans positions ni impressions : idées de requêtes, intention, concurrence |
+| B — Audit des pages | Search Console (requêtes par page) | Oui, entièrement pour les balises et le contenu |
+| C — Technique et IA | Search Console, Bing, Analytics, journaux serveur | Oui en grande partie ; l'indexation réelle et le trafic IA restent non mesurés |
+| D — Concurrence | Aucune donnée de compte nécessaire | Oui |
+| E — Croissance | Search Console, Analytics | Oui, avec des priorités moins sûres |
+
 ## Règles communes
 
 - **Un seul propriétaire par élément.** Requête d'une page : Module A. Balises et structure : Module B. Serveur et robots : Module C. Lecture des concurrents : Module D. Liens, nouvelles pages et techniques de croissance : Module E. Les mots : `redacteur-marketing`. Un module ne refait jamais le travail d'un autre ; s'il lui manque une entrée, il la demande ou propose le module concerné.
-- **Parcours complet** : C → D → A → B → `redacteur-marketing` (corrections) → Conseil final. Fais valider chaque étape avant la suivante.
+- **Parcours complet** : Étape 1 (source de données) → C → D → A → B → `redacteur-marketing` (corrections) → Conseil final. Fais valider chaque étape avant la suivante.
 - **Priorités** : le lecteur avant le mot-clé ; la consigne de l'utilisateur avant ce guide ; le document officiel avant l'étude.
 - **Gravité** : bloquant, important, confort — comme `redacteur-marketing`.
 - **Preuve manquante** : `[À COMPLÉTER : type de preuve]`. N'invente ni chiffre, ni volume, ni avis, ni témoignage, ni donnée sur un concurrent.
