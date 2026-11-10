@@ -15,6 +15,7 @@ Copiés le 10.11.2026 depuis GitHub. Licences d'origine dans `licences/`.
 | `impeccable` | Concevoir, critiquer et peaufiner une interface | pbakaus/impeccable (ec229b4) | Apache 2.0 |
 | `taste-skill` | Sites vitrines au rendu professionnel, sans effet « fait par une IA » | Leonxlnx/taste-skill (f6b7657) | MIT |
 | 13 skills Instagram (`ig-caption`, `ig-carousel`, `ig-reel`, `ig-plan`, `ig-human`…) | Rédiger et planifier le contenu Instagram | Jakeschincariol/instagram-agent-skill (d03c56b) | MIT |
+| Pack `seo-geo` (16 skills : `keyword-research`, `technical-seo-checker`, `rank-tracker`, `geo-content-optimizer`, `offsite-signal-analyzer`, `domain-authority-auditor`…) | Les 5 skills SEO du carrousel Murmur : mots-clés, audit technique, optimisation du contenu, liens entrants, suivi des positions | aaron-he-zhu/aaron-marketing-skills (3017529) | Apache 2.0 |
 | Plugin `claude-seo` (26 skills, 19 agents, commande `/seo`) | Audit SEO d'un site : `/seo audit https://exemple.ch` | AgriciDaniel/claude-seo (6be93f4) | MIT |
 
 Pas inclus, car ce ne sont pas des skills :
@@ -35,6 +36,9 @@ Seulement certains skills : `./installer.sh ~/Projets/viralya ponytail impeccabl
 Plugin SEO : dans Claude Code, tape `/plugin marketplace add <chemin>/plugins/claude-seo`,
 puis `/plugin install claude-seo@agricidaniel-claude-seo`. Les scripts Python du plugin
 s'installent avec `pip install -r plugins/claude-seo/requirements.txt`.
+
+Pack `seo-geo` : `./installer.sh --seo-geo` (copie le pack dans `~/.claude/seo-geo` et
+branche ses 16 skills dans `~/.claude/skills`, sans casser ses liens internes).
 
 Graphify a besoin de son programme : `uv tool install graphifyy` (avec deux « y »).
 
