@@ -23,10 +23,10 @@ fi
 mkdir -p "$target"
 names=("$@")
 if [ ${#names[@]} -eq 0 ]; then
-  for d in "$here"/skills/*/ "$here"/contenu/*/; do names+=("$(basename "$d")"); done
+  for d in "$here"/skills/*/ "$here"/contenu/*/ "$here"/perso/*/; do names+=("$(basename "$d")"); done
 fi
 for n in "${names[@]}"; do
-  src="$here/skills/$n"; [ -d "$src" ] || src="$here/contenu/$n"
+  src="$here/skills/$n"; [ -d "$src" ] || src="$here/contenu/$n"; [ -d "$src" ] || src="$here/perso/$n"
   [ -f "$src/SKILL.md" ] || { echo "Skill inconnu : $n" >&2; exit 1; }
   rm -rf "${target:?}/$n"
   cp -R "$src" "$target/$n"
