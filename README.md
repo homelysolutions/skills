@@ -18,6 +18,20 @@ Copiés le 10.11.2026 depuis GitHub. Licences d'origine dans `licences/`.
 | Pack `seo-geo` (16 skills : `keyword-research`, `technical-seo-checker`, `rank-tracker`, `geo-content-optimizer`, `offsite-signal-analyzer`, `domain-authority-auditor`…) | Les 5 skills SEO du carrousel Murmur : mots-clés, audit technique, optimisation du contenu, liens entrants, suivi des positions | aaron-he-zhu/aaron-marketing-skills (3017529) | Apache 2.0 |
 | Plugin `claude-seo` (26 skills, 19 agents, commande `/seo`) | Audit SEO d'un site : `/seo audit https://exemple.ch` | AgriciDaniel/claude-seo (6be93f4) | MIT |
 
+### Dossier `contenu/` : 5 skills qui attaquent ton contenu avant ton audience
+
+Écrits pour toi d'après le carrousel « 5 Skills Claude » d'automatise_avec_igor (ses fichiers d'origine ne sont pas publics).
+
+| Skill | Quand l'appeler |
+|---|---|
+| `avocat-du-diable` | Reformule ton idée, puis 5 failles citées et corrigées, verdict PUBLIABLE ou RETRAVAILLER |
+| `red-team` | 20 lecteurs hostiles, 3 passes, [SANS PREUVE], note sur 10, journal `attack-log.md` |
+| `reality-check` | Vérifie qu'un travail « terminé » marche vraiment ; ne pas livrer en dessous de 6/10 |
+| `boucle-infinie` | Gros projet découpé dans `PLAN.md`, une tâche par conversation (méthode Ralph Wiggum) |
+| `aigle-superviseur` | Contrôle final en 7 passes ; un seul échec bloque la publication |
+
+Ce sont des skills à appeler (« passe l'aigle sur ce post »), pas des règles qui bloquent tout automatiquement.
+
 Pas inclus, car ce ne sont pas des skills :
 - **OmniRoute** : un logiciel serveur qui fait passer tes outils IA par d'autres fournisseurs. Son skill `ponytail` est inclus ci-dessus.
 - **AgentSkills** : le format standard des skills (le dossier + `SKILL.md`), pas un skill à installer.
