@@ -82,6 +82,7 @@ Recueille des exemples et les **mots réellement entendus**. Ce que le dirigeant
 ## Générer la fiche PDF
 
 1. Écris la synthèse au format JSON décrit dans `references/synthese.md` (un objet `fiches` par couple cible-offre). C'est la **synthèse stable** : garde-la, elle sert aux autres skills.
+   **Couleurs de la marque** : la fiche prend les couleurs de l'entreprise étudiée (bloc `marque` : couleur principale, couleur d'accent, polices, logo). Avant l'export, demande-les en une question si elles ne sont pas connues : code couleur, charte, fichier du logo, ou adresse du site. Si un site est fourni, tu peux relever les couleurs et polices dans son code (variables CSS, couleurs les plus utilisées) et les faire confirmer. Ne devine pas une charte : si rien n'est connu ou si la personne ne veut pas s'en occuper, laisse le bloc vide et la charte Homely Solutions s'applique par défaut. `prepare_par` affiche l'agence en pied de page.
 2. Lance le script fourni (Python 3, aucune dépendance ; il utilise Chrome, Chromium, Edge ou Brave en mode headless) :
 
    ```bash

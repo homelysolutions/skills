@@ -9,6 +9,7 @@ Aucune dependance Python. Le PDF est imprime par Chrome, Chromium, Edge ou Brave
 en mode headless. Sans navigateur, seul le .html est produit (le script le dit).
 """
 import argparse
+import base64
 import html
 import json
 import os
@@ -22,6 +23,15 @@ import unicodedata
 VIDE = "à définir"
 
 EXEMPLE = {
+    "marque": {
+        "nom": "Exemple Plomberie (fictif)",
+        "couleur_principale": "#0b3c5d",
+        "couleur_accent": "#1d9bd1",
+        "police_titres": "Montserrat",
+        "police_texte": "Open Sans",
+        "logo": "",
+        "prepare_par": "Homely Solutions",
+    },
     "entreprise": {
         "nom": "Exemple Plomberie (fictif)",
         "activite": "Plomberie : dépannage, rénovation de salles de bains, entretien",
@@ -81,34 +91,134 @@ EXEMPLE = {
     ],
 }
 
+# Charte par defaut : Homely Solutions (homely-solutions.com)
+MARQUE_DEFAUT = {
+    "nom": "Homely Solutions",
+    "couleur_principale": "#2b2b2b",
+    "couleur_accent": "#8a9a7c",
+    "police_titres": "Playfair Display",
+    "police_texte": "Figtree",
+    "logo": "",
+}
+
 CSS = """
 @page { size: A4; margin: 11mm 12mm; }
 * { box-sizing: border-box; }
-body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #1d2433;
+body { font-family: {{FT}}, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; color: #1f2329;
        font-size: 9.2pt; line-height: 1.32; margin: 0; }
 .fiche { page-break-after: always; }
 .fiche:last-child { page-break-after: auto; }
-header { border-bottom: 2.5px solid #1f4e79; padding-bottom: 5px; margin-bottom: 8px; }
-h1 { font-size: 15pt; margin: 0 0 3px; color: #1f4e79; letter-spacing: -0.2px; }
+header { border-bottom: 3px solid {{A}}; padding-bottom: 5px; margin-bottom: 8px;
+         display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+header .logo { max-height: 15mm; max-width: 45mm; object-fit: contain; }
+h1, h2 { font-family: {{FH}}, Georgia, "Times New Roman", serif; }
+h1 { font-size: 15.5pt; margin: 0 0 3px; color: {{P}}; letter-spacing: -0.2px; font-weight: 600; }
+.marque { font-size: 7.6pt; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: {{AT}}; margin-bottom: 1px; }
 .meta { font-size: 8pt; color: #555; display: flex; flex-wrap: wrap; gap: 4px 14px; }
 .badge { display: inline-block; padding: 1px 7px; border-radius: 9px; font-weight: 600; font-size: 7.8pt; }
 .b-ok { background: #dff3e4; color: #1d6b34; } .b-prov { background: #fff1d6; color: #8a5a00; }
-.b-conf { background: #e7eef8; color: #1f4e79; }
+.b-conf { background: {{AL}}; color: {{P}}; }
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 9px; }
 .stack { display: flex; flex-direction: column; gap: 6px; } .stack section { flex: 1 1 auto; }
 .full { grid-column: 1 / -1; } .g3 { grid-template-columns: 1fr 1fr 1fr; }
-section { border: 1px solid #d9dfe8; border-radius: 5px; padding: 6px 8px; break-inside: avoid; }
-h2 { font-size: 9.6pt; margin: 0 0 3px; color: #1f4e79; }
-h2 .n { display: inline-block; width: 15px; height: 15px; border-radius: 50%; background: #1f4e79;
-        color: #fff; font-size: 7.5pt; text-align: center; line-height: 15px; margin-right: 4px; }
-dl { margin: 0; } .kv { margin: 0 0 2px; } .kv b { font-weight: 600; color: #3a4456; }
-ul { margin: 0; padding-left: 13px; } li { margin: 0; }
+section { border: 1px solid {{AB}}; border-radius: 6px; padding: 6px 8px; break-inside: avoid; }
+h2 { font-size: 10pt; margin: 0 0 3px; color: {{P}}; font-weight: 600; }
+h2 .n { display: inline-block; width: 15px; height: 15px; border-radius: 50%; background: {{A}};
+        color: {{AN}}; font-family: {{FT}}, Helvetica, Arial, sans-serif; font-size: 7.5pt; font-weight: 700;
+        text-align: center; line-height: 15px; margin-right: 5px; vertical-align: 1px; }
+dl { margin: 0; } .kv { margin: 0 0 2px; } .kv b { font-weight: 600; color: {{PK}}; }
+ul { margin: 0; padding-left: 13px; } li { margin: 0; } li::marker { color: {{A}}; }
 .c2 dl { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
 .vide { color: #999; font-style: italic; }
-.prix { font-size: 11pt; font-weight: 700; }
-section.confirm { background: #fbf8ef; border-color: #eadfbf; }
-footer { margin-top: 7px; font-size: 7.6pt; color: #666; border-top: 1px solid #ddd; padding-top: 4px; }
+.prix { font-size: 12pt; font-weight: 700; color: {{P}}; font-family: {{FH}}, Georgia, serif; }
+section.confirm { background: {{AL}}; border-color: {{AB}}; }
+footer { margin-top: 7px; font-size: 7.6pt; color: #666; border-top: 1px solid {{AB}}; padding-top: 4px; }
 """
+
+
+def _rgb(h):
+    h = str(h).strip().lstrip("#")
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    if not re.match(r"^[0-9a-fA-F]{6}$", h):
+        return None
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def _hex(c):
+    return "#%02x%02x%02x" % tuple(max(0, min(255, int(round(x)))) for x in c)
+
+
+def _mix(c, d, t):
+    return tuple(a + (b - a) * t for a, b in zip(c, d))
+
+
+def _lum(c):
+    def ch(x):
+        x = x / 255.0
+        return x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4
+    r, g, b = (ch(x) for x in c)
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def _contrast(a, b):
+    la, lb = sorted([_lum(a), _lum(b)], reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
+def _lisible(c, mini=4.5):
+    """Assombrit une couleur jusqu'a un contraste suffisant sur blanc."""
+    w = (255, 255, 255)
+    for _ in range(20):
+        if _contrast(c, w) >= mini:
+            break
+        c = _mix(c, (0, 0, 0), 0.12)
+    return c
+
+
+def theme(data):
+    m = dict(MARQUE_DEFAUT)
+    m.update({k: v for k, v in (data.get("marque") or {}).items() if v})
+    p = _rgb(m["couleur_principale"]) or _rgb(MARQUE_DEFAUT["couleur_principale"])
+    a = _rgb(m["couleur_accent"]) or _rgb(MARQUE_DEFAUT["couleur_accent"])
+    p = _lisible(p)  # titres toujours lisibles
+    w = (255, 255, 255)
+    tokens = {
+        "{{P}}": _hex(p), "{{PK}}": _hex(_mix(p, w, 0.15)),
+        "{{A}}": _hex(a), "{{AT}}": _hex(_lisible(a, 3.0)),
+        "{{AN}}": "#ffffff" if _contrast(a, w) >= 2.2 else "#1f2329",
+        "{{AB}}": _hex(_mix(a, w, 0.62)), "{{AL}}": _hex(_mix(a, w, 0.88)),
+        "{{FH}}": '"%s"' % m["police_titres"].replace('"', ""),
+        "{{FT}}": '"%s"' % m["police_texte"].replace('"', ""),
+    }
+    css = CSS
+    for k, v in tokens.items():
+        css = css.replace(k, v)
+    fams = []
+    for f in [m["police_titres"], m["police_texte"]]:
+        f = f.strip()
+        if f and f not in fams and f.lower() not in ("helvetica", "arial", "georgia", "times new roman"):
+            fams.append(f)
+    fonts = ""
+    if fams:
+        fonts = ('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?%s&display=swap">'
+                 % "&".join("family=%s:wght@400;500;600;700" % f.replace(" ", "+") for f in fams))
+    return m, css, fonts
+
+
+def logo_src(logo, base_dir):
+    if not logo:
+        return ""
+    if re.match(r"^(https?:|data:)", logo):
+        return logo
+    path = logo if os.path.isabs(logo) else os.path.join(base_dir, logo)
+    if not os.path.exists(path):
+        print("Logo introuvable, ignore : %s" % path)
+        return ""
+    ext = os.path.splitext(path)[1].lower().lstrip(".")
+    mime = {"svg": "image/svg+xml", "jpg": "image/jpeg", "jpeg": "image/jpeg", "webp": "image/webp"}.get(ext, "image/png")
+    with open(path, "rb") as fh:
+        return "data:%s;base64,%s" % (mime, base64.b64encode(fh.read()).decode())
 
 
 def esc(v):
@@ -208,14 +318,24 @@ def fiche_html(data, f):
                 ", ".join(x for x in [va.get("personne"), va.get("date"), va.get("portee")] if x) or "pas encore validée"))
     if va.get("corrections"):
         foot += " Corrections : %s." % esc(va["corrections"])
-    return ('<div class="fiche"><header><h1>%s</h1><div class="meta">%s</div></header>'
-            '<div class="grid">%s</div><footer>%s</footer></div>') % (esc(titre), meta, "".join(layout), foot)
+    nom_marque = (data.get("marque") or {}).get("nom") or e.get("nom") or ""
+    logo = data.get("_logo_src", "")
+    logo_html = '<img class="logo" src="%s" alt="">' % esc(logo) if logo else ""
+    agence = (data.get("marque") or {}).get("prepare_par")
+    if agence:
+        foot += " Préparé par %s." % esc(agence)
+    return ('<div class="fiche"><header><div><div class="marque">%s</div><h1>%s</h1><div class="meta">%s</div></div>%s</header>'
+            '<div class="grid">%s</div><footer>%s</footer></div>') % (
+        esc(nom_marque), esc(titre), meta, logo_html, "".join(layout), foot)
 
 
-def to_html(data):
+def to_html(data, base_dir="."):
+    m, css, fonts = theme(data)
+    data = dict(data)
+    data["_logo_src"] = logo_src(m.get("logo"), base_dir)
     body = "".join(fiche_html(data, f) for f in data.get("fiches", []))
-    return ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Fiche avatar</title>'
-            '<style>%s</style></head><body>%s</body></html>') % (CSS, body)
+    return ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Fiche avatar</title>%s'
+            '<style>%s</style></head><body>%s</body></html>') % (fonts, css, body)
 
 
 def j(v):
@@ -284,7 +404,7 @@ def find_browser():
 
 def print_pdf(browser, html_path, pdf_path):
     with tempfile.TemporaryDirectory() as prof:
-        cmd = [browser, "--headless=new", "--disable-gpu", "--no-first-run", "--user-data-dir=" + prof,
+        cmd = [browser, "--headless=new", "--disable-gpu", "--virtual-time-budget=8000", "--no-first-run", "--user-data-dir=" + prof,
                "--no-pdf-header-footer", "--print-to-pdf-no-header", "--print-to-pdf=" + pdf_path,
                "file://" + os.path.abspath(html_path)]
         subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=90)
@@ -317,7 +437,7 @@ def main():
     base = os.path.join(out, "Fiche-avatar-%s-%s" % (slug(data.get("entreprise", {}).get("nom") or "entreprise"), seg))
 
     with open(base + ".html", "w", encoding="utf-8") as fh:
-        fh.write(to_html(data))
+        fh.write(to_html(data, os.path.dirname(os.path.abspath(args.json))))
     with open(base + ".md", "w", encoding="utf-8") as fh:
         fh.write(to_md(data))
     print("Synthèse : %s.md" % base)

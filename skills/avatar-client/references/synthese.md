@@ -3,6 +3,7 @@
 C'est la source de la fiche PDF et la base transmise aux autres skills. Même structure dans les trois modes.
 
 Règles de remplissage :
+- `marque` est facultatif. Champ vide ou bloc absent = charte Homely Solutions (anthracite `#2b2b2b`, sauge `#8a9a7c`, Playfair Display / Figtree). N'invente pas les couleurs d'un client.
 - Une valeur absente = `""` ou `[]`. Le PDF affichera « à définir ». N'invente rien pour remplir.
 - Dans les listes, préfixe si utile par `[proposé]` ce qui vient de toi et non du dirigeant. Les déclarations, hypothèses et inconnues vont aussi dans `fiabilite`.
 - `statut` : `"à confirmer"`, `"provisoire"` ou `"validée"`. Si `"validée"`, remplis `validation.personne`, `validation.date` et `validation.portee` (sur quoi porte la validation).
@@ -10,6 +11,15 @@ Règles de remplissage :
 
 ```json
 {
+  "marque": {
+    "nom": "nom affiché en haut de la fiche (défaut : entreprise.nom)",
+    "couleur_principale": "#hex des titres (assombrie automatiquement si peu lisible)",
+    "couleur_accent": "#hex des filets, pastilles et encadrés",
+    "police_titres": "nom Google Fonts, ex. Playfair Display",
+    "police_texte": "nom Google Fonts, ex. Figtree",
+    "logo": "chemin du fichier (relatif au JSON) ou URL ; vide si aucun",
+    "prepare_par": "agence affichée en pied de page ; facultatif"
+  },
   "entreprise": {
     "nom": "",
     "activite": "",
