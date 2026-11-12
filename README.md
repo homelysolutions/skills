@@ -18,6 +18,14 @@ Copiés le 10.11.2026 depuis GitHub. Licences d'origine dans `licences/`.
 | Pack `seo-geo` (16 skills : `keyword-research`, `technical-seo-checker`, `rank-tracker`, `geo-content-optimizer`, `offsite-signal-analyzer`, `domain-authority-auditor`…) | Les 5 skills SEO du carrousel Murmur : mots-clés, audit technique, optimisation du contenu, liens entrants, suivi des positions | aaron-he-zhu/aaron-marketing-skills (3017529) | Apache 2.0 |
 | Plugin `claude-seo` (26 skills, 19 agents, commande `/seo`) | Audit SEO d'un site : `/seo audit https://exemple.ch` | AgriciDaniel/claude-seo (6be93f4) | MIT |
 
+### Skill maison : `avatar-client`
+
+| Skill | À quoi il sert |
+|---|---|
+| `avatar-client` | Cadrage marketing d'une entreprise (entretien guidé, formulaire pour une agence, ou analyse de réponses) et fiche avatar PDF d'une page par cible, réutilisable par les skills de rédaction. Commande : `/avatar-client`. Tutoriel : `docs/avatar-client-tutoriel.pdf` |
+
+Installer seulement celui-ci : `./installer.sh ~ avatar-client` installe dans `~/.claude/skills`.
+
 ### Dossier `contenu/` : 5 skills qui attaquent ton contenu avant ton audience
 
 Écrits pour toi d'après le carrousel « 5 Skills Claude » d'automatise_avec_igor (ses fichiers d'origine ne sont pas publics).
