@@ -4,9 +4,16 @@
 #   ./installer.sh <project>  -> every skill into <project>/.claude/skills
 #   ./installer.sh <project> ponytail impeccable -> only the named skills
 #   ./installer.sh --seo-geo -> the seo-geo pack (keeps its shared references)
+#   ./installer.sh --agents  -> the Agency Agents into ~/.claude/agents
 # Existing skills with the same name are replaced. claude-seo is a plugin: see README.md.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
+if [ "${1:-}" = "--agents" ]; then
+  mkdir -p "$HOME/.claude/agents"
+  cp "$here"/agents/*.md "$HOME/.claude/agents/"
+  echo "-> $(ls "$here"/agents/*.md | wc -l | tr -d ' ') agents dans $HOME/.claude/agents"
+  exit 0
+fi
 if [ "${1:-}" = "--seo-geo" ]; then
   mkdir -p "$HOME/.claude/skills"; rm -rf "$HOME/.claude/seo-geo"
   cp -R "$here/plugins/seo-geo" "$HOME/.claude/seo-geo"
